@@ -1,0 +1,25 @@
+# 备用CI配置文件（可选）
+# 如果使用GitLab CI，可以参考此配置
+
+stages:
+  - generate
+  - deploy
+
+generate:
+  stage: generate
+  image: python:3.11
+  script:
+    - pip install -r requirements.txt
+    - python src/main.py --date $(date +%Y-%m-%d)
+  artifacts:
+    paths:
+      - content/
+      - docs/
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploy to GitLab Pages"
+  only:
+    - main

@@ -1,0 +1,77 @@
+name: AI Daily News - 自动生成
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC 0点 = 北京时间8点
+  workflow_dispatch:  # 也支持手动触发
+    inputs:
+      source:
+        description: '触发来源'
+        required: false
+        default: 'manual'
+        type: string
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: 设置Python环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: 安装Python依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        echo "✅ 依赖安装完成"
+    
+    - name: 设置Node.js环境
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: 安装Node依赖
+      run: |
+        npm install
+        npx vitepress build --outDir .vitepress/dist
+      # 这里我们先只构建空站点，实际内容由Python生成
+    
+    - name: 运行AI Daily News
+      env:
+        OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      run: |
+        echo "🚀 开始生成日报..."
+        python src/main.py --date $(date +%Y-%m-%d)
+        echo "✅ 生成完成"
+    
+    - name: 提交更改
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        
+        # 添加所有更改
+        git add content/ .vitepress/dist/ docs/ 2>/dev/null || true
+        
+        # 如果有更改，提交并推送
+        if git diff --staged --quiet; then
+          echo "📭 没有检测到更改"
+        else
+          git commit -m "🤖 AI Daily News 更新 $(date '+%Y-%m-%d')"
+          git push origin main
+          echo "✅ 更改已推送"
+        fi
+    
+    - name: 完成通知
+      run: |
+        echo "🎉 AI Daily News 生成完成！"
+        echo "📅 日期: $(date '+%Y-%m-%d')"
+        echo "🌐 网站将自动更新: https://${{ github.repository_owner }}.github.io/ai-daily-news/"

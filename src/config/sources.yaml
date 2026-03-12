@@ -1,0 +1,189 @@
+# AI Daily News - 新闻源配置
+# 按领域分类配置RSS源
+
+# RSS订阅源
+rss_feeds:
+  # ========== AI ==========
+  - name: "Hacker News (AI)"
+    url: "https://hnrss.org/frontpage"
+    type: "ai"
+    max_items: 5
+    keywords: ["AI", "artificial intelligence", "machine learning", "GPT", "OpenAI"]
+    
+  - name: "MIT Technology Review"
+    url: "https://www.technologyreview.com/feed/"
+    type: "ai"
+    max_items: 3
+    keywords: ["AI", "artificial intelligence"]
+
+  - name: "OpenAI Blog"
+    url: "https://openai.com/blog/rss.xml"
+    type: "ai"
+    max_items: 3
+    keywords: ["OpenAI", "GPT", "ChatGPT"]
+
+  # ========== 编程 ==========
+  - name: "Hacker News (Programming)"
+    url: "https://hnrss.org/frontpage"
+    type: "programming"
+    max_items: 5
+    keywords: ["programming", "code", "developer", "software"]
+
+  - name: "GitHub Trending"
+    url: "https://github.com/trending.atom"
+    type: "programming"
+    max_items: 5
+    keywords: ["trending", "github"]
+
+  - name: "Dev.to"
+    url: "https://dev.to/feed"
+    type: "programming"
+    max_items: 5
+    keywords: ["programming", "developer"]
+
+  # ========== 科技/数码 ==========
+  - name: "TechCrunch"
+    url: "https://techcrunch.com/feed/"
+    type: "tech"
+    max_items: 5
+    keywords: ["tech", "technology", "startup"]
+
+  - name: "The Verge"
+    url: "https://www.theverge.com/rss/index.xml"
+    type: "tech"
+    max_items: 4
+    keywords: ["tech", "gadgets"]
+
+  - name: "36kr"
+    url: "https://36kr.com/feed"
+    type: "tech"
+    max_items: 5
+    keywords: ["科技", "创业"]
+
+  # ========== 创业 ==========
+  - name: "Hacker News (Startup)"
+    url: "https://hnrss.org/frontpage"
+    type: "startup"
+    max_items: 3
+    keywords: ["startup", "entrepreneur", "funding"]
+
+  - name: "36kr Startup"
+    url: "https://36kr.com/feed"
+    type: "startup"
+    max_items: 3
+    keywords: ["创业", "融资"]
+
+  - name: "虎嗅"
+    url: "https://www.huxiu.com/feed"
+    type: "startup"
+    max_items: 3
+    keywords: ["创业", "商业"]
+
+  # ========== 经济 ==========
+  - name: "Wall Street Journal (需订阅)"
+    url: "https://feeds.a.dj.com/rss/RSSMarketsMain.xml"
+    type: "economy"
+    max_items: 3
+    keywords: ["economy", "finance", "market"]
+    requires_auth: false  # 公开RSS
+
+  - name: "FT中文网"
+    url: "https://www.ftchinese.com/rss/channel/140"
+    type: "economy"
+    max_items: 3
+    keywords: ["经济", "金融"]
+
+  # ========== 数码 ==========
+  - name: "The Verge (Gadgets)"
+    url: "https://www.theverge.com/rss/index.xml"
+    type: "digital"
+    max_items: 4
+    keywords: ["gadget", "device", "smartphone"]
+
+  - name: "Engadget"
+    url: "https://www.engadget.com/rss.xml"
+    type: "digital"
+    max_items: 4
+    keywords: ["gadget", "digital"]
+
+  # ========== 高科技 ==========
+  - name: "MIT Technology Review"
+    url: "https://www.technologyreview.com/feed/"
+    type: "hightech"
+    max_items: 3
+    keywords: ["technology", "innovation"]
+
+  - name: "Wired"
+    url: "https://www.wired.com/feed/rss"
+    type: "hightech"
+    max_items: 3
+    keywords: ["technology", "innovation"]
+
+  # ========== 新能源汽车 ==========
+  - name: "36kr (EV)"
+    url: "https://36kr.com/feed"
+    type: "ev"
+    max_items: 3
+    keywords: ["新能源", "电动汽车", "Tesla"]
+
+  - name: "Electrek"
+    url: "https://electrek.co/feed/"
+    type: "ev"
+    max_items: 3
+    keywords: ["electric vehicle", "Tesla", "EV"]
+
+# 领域分类描述
+categories:
+  ai: "人工智能"
+  programming: "编程开发"
+  tech: "科技数码"
+  startup: "创业投资"
+  economy: "经济金融"
+  digital: "数码产品"
+  hightech: "高科技"
+  ev: "新能源汽车"
+  imaging: "数码影像"  # 暂无专用源，从其他源筛选
+
+# 采集偏好设置
+preferences:
+  max_total_items: 50          # 总共最多文章数
+  max_per_category: 10         # 每类最多文章数
+  min_content_length: 50       # 最小内容长度
+  timeout_seconds: 15          # 请求超时时间
+  retry_count: 2               # 重试次数
+  deduplicate: true            # 去重
+  dedup_by_title: true         # 按标题去重
+  dedup_by_url: true           # 按链接去重
+  
+  # 时间过滤
+  date_range_days: 2           # 只采集最近N天的文章
+  
+  # AI摘要设置
+  ai_summary:
+    enabled: true
+    max_articles: 20           # 最多 summarise 的文章数
+    summary_length: 150        # 摘要长度（字符）
+    prompt: |
+      你是一个专业的科技资讯编辑。请为以下新闻生成简明的中文摘要，突出核心信息，控制在150字以内。
+      
+      标题：{title}
+      来源：{source}
+      内容：{content}
+      
+      摘要：
+  
+  # 通知设置（可选）
+  notifications:
+    enabled: false
+    on_error: true
+    on_success: false
+
+# 代理设置（可选）
+proxy:
+  enabled: false
+  # url: "http://proxy.example.com:8080"
+  
+# 请求头
+headers:
+  User-Agent: "Mozilla/5.0 (compatible; AI-Daily-News/1.0; +https://github.com/spidereast/ai-daily-news)"
+  Accept: "application/rss+xml, application/xml, text/xml; q=0.9, */*; q=0.8"

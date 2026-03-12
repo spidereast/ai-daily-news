@@ -1,0 +1,34 @@
+# AI Daily News - Python依赖
+# 使用pip安装: pip install -r requirements.txt
+
+# RSS解析
+feedparser==6.0.10
+
+# HTTP请求
+requests==2.31.0
+httpx==0.27.0  # 异步HTTP
+
+# HTML解析
+beautifulsoup4==4.12.2
+lxml==5.1.0
+
+# AI API (OpenRouter)
+openai==1.12.0
+
+# 数据处理
+python-dateutil==2.9.0.post0
+pytz==2024.1
+
+# 配置解析
+PyYAML==6.0.1
+
+# 工具类
+tqdm==4.66.1
+colorama==0.4.6
+python-dotenv==1.0.0
+
+# 日志
+structlog==24.1.0
+
+# 类型提示（Python 3.11+内置）
+# typing-extensions==4.9.0  # 仅旧版本需要
